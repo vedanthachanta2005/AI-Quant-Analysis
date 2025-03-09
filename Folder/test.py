@@ -21,7 +21,7 @@ def knapsack_with_bonuses(weights, values, W, bonuses):
             dp[n][w] = max(dp[n][w], dp[n][w - total_weight] + total_value)
     
     return dp[n][W]
-
+#vedanth
 # Example usage
 # Example usage
 weights = [2, 3, 4, 5]
