@@ -15,5 +15,7 @@ symbols_list = snp500['Symbol'].unique().tolist()
 
 end_date = '2025-03-10'
 start_date = pd.to_datetime(end_date)-pd.DateOffset(50)
-df = yf.download(tickers=symbols_list, start=start_date, end=end_date)
-
+df = yf.download(tickers=symbols_list,
+                start=start_date, 
+                end=end_date)
+df.stack()
