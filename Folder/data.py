@@ -19,3 +19,4 @@ df = yf.download(tickers=symbols_list,
                 start=start_date, 
                 end=end_date)
 df.stack()
+print("Finished")
