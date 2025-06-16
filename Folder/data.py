@@ -2,9 +2,9 @@ import yfinance as yf
 import pandas as pd
 from datetime import date
 #y finance only allows 60 days of data when trying to get low interval data
-data = yf.download("EURUSD=X", start="2025-5-1", end=date.today(), interval='15m')
+data = yf.download("EURUSD=X", start="2025-5-1", end=date.today(), interval='15m') #change later to 15m
 data.iloc[-1:,:]
-data.Open.iloc
+#data.Open.iloc
 
 def signal(df): 
     open = df.Open.iloc[-1]
@@ -22,9 +22,12 @@ def signal(df):
     else: 
         return 0
     
-signal = []
-signal.append(0)
+signals = []
+signals.append(0)
 for i in range(1, len(data)):
     df = data[i-1: i+1]
     signal.append(signal(df))
-data["signal"] = signal
+data["signal"] = signals
+data.signal.value_counts()
+#data.iloc[:, :]
+
