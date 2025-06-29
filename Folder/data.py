@@ -1,7 +1,13 @@
 import yfinance as yf
 import pandas as pd
 from datetime import date
-import robin_stocks.robinhood as r
+from apscheduler.schedulers.blocking import BlockingScheduler
+from oandapyV20 import API
+import oandapyV20.endpoints.orders as orders
+from oandapyV20.contrib.requests import MarketOrderRequest
+from oanda_candles import Pair, Gran, CandleCollector, CandleClient
+from oandapyV20.contrib.requests import TakeProfitDetails, StopLossDetails
+
 #y finance only allows 60 days of data when trying to get low interval data
 data = yf.download("EURUSD=X", start="2025-5-1", end=date.today(), interval='15m') #change later to 15m
 data.iloc[-1:,:]
