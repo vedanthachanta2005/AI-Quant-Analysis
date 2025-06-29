@@ -50,5 +50,53 @@ for candle in candles:
     print(float(str(candle.bid.o))>1)
 # barath test
 
+def trading_job():
+    candles = get_candles(3)
+    dfstream = pd.DataFrame(columns = ['Open','Close','High','Low'])
 
+    i = 0
 
+    for candle in candles:
+        dfstream.loc[i,['Open']] = float(str(candle.bid.o))
+        dfstream.loc[i,['Close']] = float(str(candle.bid.c))
+        dfstream.loc[i,['High']] = float(str(candle.bid.h))
+        dfstream.loc[i,['Low']] = float(str(candle.bid.l))
+        i=i+1
+
+    dfstream['Open'] = dfstream['Open'].astype(float)
+    dfstream['Close'] = dfstream['Close'].astype(float)
+    dfstream['High'] = dfstream['High'].astype(float)
+    dfstream['Low'] = dfstream['Low'].astype(float)
+
+    signal = signal_generator(dfstream.iloc[:-1,:])
+
+# Executing orders
+# AccountID = "XXXXXXX" #your account ID here
+    client = API(access_token)
+
+    SLTPRatio = 2.
+
+    previous_candleR = abs(dfstream['Highg'].iloc[-2]-dfstream['Close'].iloc[-2])
+
+    SLBuy = float(str(candle.bid.o))-previous_candleR
+    SLSell = float(str(candle.bid.o))+previous_candleR
+
+    TPBuy = float(str(candle.bid.o))+previous_candleR*SLTPRatio
+    TPSell = float(str(candle.bid.o))-previous_candleR*SLTPRatio
+
+    print(dfstream.iloc[:-1,:])
+    print(TPBuy, " ", SLBuy, " ", TPSell, " ", SLSell)
+
+    #Sell
+    if signal == 1:
+        mo = MarketOrderRequest(instruments="Eur_USD",units=-1000, TakeProfitsOnFill=TakeProfitDetails(price=TPSell).data, stopLossOnFill=StopLossDetails(price=SLSell).data)
+        r = orders.OrderCreate(accountID,data = mo.data)
+        rv = client.request(r)
+        print(rv)
+    #Buy
+    if signal == 2:
+        mo = MarketOrderRequest(instruments="Eur_USD",units=1000, TakeProfitsOnFill=TakeProfitDetails(price=TPSell).data, stopLossOnFill=StopLossDetails(price=SLSell).data)
+        r = orders.OrderCreate(accountID,data = mo.data)
+        rv = client.request(r)
+        print(rv)
+        
