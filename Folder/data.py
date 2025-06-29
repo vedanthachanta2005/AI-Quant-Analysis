@@ -49,4 +49,3 @@ candles = get_candles(3)
 for candle in candles: 
     print(float(str(candle.bid.o))>1)
 
-
