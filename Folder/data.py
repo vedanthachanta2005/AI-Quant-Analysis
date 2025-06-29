@@ -37,16 +37,8 @@ for i in range(1, len(data)):
 data["signal"] = signals
 data.signal.value_counts()
 #data.iloc[:, :]
+login = r.login('username', 'password')
 
-def get_candles(n):
-    client = CandleClient(access_token, real=False)
-    collector = client.get_collector(Pair.EUR_USD, Gran.M15)
-    candles = collector.grab(n)
-    return candles
 
-candles = get_candles(3)
-
-for candle in candles: 
-    print(float(str(candle.bid.o))>1)
 
 
