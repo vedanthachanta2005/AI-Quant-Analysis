@@ -7,7 +7,7 @@ import oandapyV20.endpoints.orders as orders
 from oandapyV20.contrib.requests import MarketOrderRequest
 from oanda_candles import Pair, Gran, CandleCollector, CandleClient
 from oandapyV20.contrib.requests import TakeProfitDetails, StopLossDetails
-
+from config import access_token, accountID
 #y finance only allows 60 days of data when trying to get low interval data
 data = yf.download("EURUSD=X", start="2025-5-1", end=date.today(), interval='15m') #change later to 15m
 data.iloc[-1:,:]
@@ -39,5 +39,15 @@ data.signal.value_counts()
 #data.iloc[:, :]
 login = r.login('username', 'password')
 
+def get_candles(n):
+    client = CandleClient(access_token, real=False)
+    collector = client.get_collector(Pair.EUR_USD, Gran.M15)
+    candles = collector.grab(n)
+    return candles
+
+candles = get_candles(3)
+
+for candle in candles: 
+    print(float(str(candle.bid.o))>1)
 
 
