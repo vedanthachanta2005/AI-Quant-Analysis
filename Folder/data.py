@@ -1,6 +1,7 @@
 import yfinance as yf
 import pandas as pd
 from datetime import date
+import robin_stocks.robinhood as r
 #y finance only allows 60 days of data when trying to get low interval data
 data = yf.download("EURUSD=X", start="2025-5-1", end=date.today(), interval='15m') #change later to 15m
 data.iloc[-1:,:]
@@ -30,4 +31,5 @@ for i in range(1, len(data)):
 data["signal"] = signals
 data.signal.value_counts()
 #data.iloc[:, :]
+login = r.login('username', 'password')
 
