@@ -37,7 +37,6 @@ for i in range(1, len(data)):
 data["signal"] = signals
 data.signal.value_counts()
 #data.iloc[:, :]
-login = r.login('username', 'password')
 
 def get_candles(n):
     client = CandleClient(access_token, real=False)
