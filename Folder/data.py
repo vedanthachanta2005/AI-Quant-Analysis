@@ -33,7 +33,7 @@ signals = []
 signals.append(0)
 for i in range(1, len(data)):
     df = data[i-1: i+1]
-    signal.append(signal(df))
+    signals.append(signal(df))
 data["signal"] = signals
 data.signal.value_counts()
 #data.iloc[:, :]
@@ -76,7 +76,7 @@ def trading_job():
 
     SLTPRatio = 2.
 
-    previous_candleR = abs(dfstream['Highg'].iloc[-2]-dfstream['Close'].iloc[-2])
+    previous_candleR = abs(dfstream['High'].iloc[-2]-dfstream['Close'].iloc[-2])
 
     SLBuy = float(str(candle.bid.o))-previous_candleR
     SLSell = float(str(candle.bid.o))+previous_candleR
@@ -89,13 +89,15 @@ def trading_job():
 
     #Sell
     if signal == 1:
-        mo = MarketOrderRequest(instruments="Eur_USD",units=-1000, TakeProfitsOnFill=TakeProfitDetails(price=TPSell).data, stopLossOnFill=StopLossDetails(price=SLSell).data)
+        mo = MarketOrderRequest(instrument="Eur_USD",units=-1000, takeProfitOnFill=TakeProfitDetails(price=TPSell).data,
+            stopLossOnFill=StopLossDetails(price=SLSell).data)
         r = orders.OrderCreate(accountID,data = mo.data)
         rv = client.request(r)
         print(rv)
     #Buy
     if signal == 2:
-        mo = MarketOrderRequest(instruments="Eur_USD",units=1000, TakeProfitsOnFill=TakeProfitDetails(price=TPSell).data, stopLossOnFill=StopLossDetails(price=SLSell).data)
+        mo = MarketOrderRequest(instrument="Eur_USD",units=1000, takeProfitOnFill=TakeProfitDetails(price=TPBuy).data,
+            stopLossOnFill=StopLossDetails(price=SLBuy).data)
         r = orders.OrderCreate(accountID,data = mo.data)
         rv = client.request(r)
         print(rv)
